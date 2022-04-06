@@ -24,17 +24,17 @@ import {
 } from "@chakra-ui/react"
 
 
-import {useDispatch} from "react-redux"
+import { useAppDispatch , useAppSelector } from "../redux/Store"
 import { signoutGoogle } from "../actions/authActions"
 import CustomLink from "../containers/customLink"
 
 type Props = {}
 
 const SideBar = (props: Props) => {
-  
 
-  const dispatch= useDispatch()
+  const { userData }  = useAppSelector((state)=>state.authUser)
   
+  const dispatch= useAppDispatch()
 
   return (
     <Flex
@@ -55,13 +55,13 @@ const SideBar = (props: Props) => {
       <Spacer />
       <Menu>
         <MenuButton justifyContent="center" d="flex" p="20px">
-          <Avatar borderRadius="50%" h="30px" w="30px" src="" />
+          <Avatar borderRadius="50%" h="40px" w="40px" src={userData?.photoURL as string} />
         </MenuButton>
         <MenuList>
           <MenuItem
             as="button"
             onClick={() => {
-              dispatch(signoutGoogle())
+              dispatch<any>(signoutGoogle())
             }}
           >
             <Image w="20px" mx="10px" src="../../asset/LogoutIcon.svg" /> Log

@@ -21,6 +21,7 @@ import {
   Flex,
   Avatar,
   Spacer,
+  Center
 } from "@chakra-ui/react"
 import { HamburgerIcon } from "@chakra-ui/icons"
 type Props = {}
@@ -29,7 +30,7 @@ const BoxMotion = motion(Box)
 const transition = {
   type: "tween",
   ease: "easeOut",
-  duration: 1,
+  duration: 0.5,
 }
 
 const VariantMotion = {
@@ -45,16 +46,18 @@ const Chats = (props: Props) => {
   return (
     <BoxMotion
       w="100%"
-      bg="#5f3100"
+      // bg="#5f3100"
+      bg="whiteAlpha.400"
       variants={VariantMotion}
       initial="hidden"
       animate="visible"
       exit="close"
+      shadow="2xl"
     >
-      <Flex bg="whiteAlpha.300" p="8px">
+      <Flex d="none" bg="whiteAlpha.300" shadow="xl" p="8px">
         <Box d="flex">
           <Avatar borderColor="whiteAlpha.400" />
-          <Heading color="whiteAlpha.900" mx="10px" my="auto" size="sm">
+          <Heading color="blackAlpha.900" mx="10px" my="auto" size="sm">
             Name
           </Heading>
         </Box>
@@ -62,7 +65,7 @@ const Chats = (props: Props) => {
         <Box m="auto">
           <Menu>
             <MenuButton>
-              <HamburgerIcon color="whiteAlpha.900" w="30px" h="30px" />
+              <HamburgerIcon color="blackAlpha.900" w="30px" h="30px" />
             </MenuButton>
             <MenuList>
               <MenuItem
@@ -77,6 +80,12 @@ const Chats = (props: Props) => {
           </Menu>
         </Box>
       </Flex>
+      <Center m="300px" >
+        <Box textAlign="center" >
+        <Image  w="150px" alt="messages"  src="../../asset/messages.svg" />
+        <Text>No messages</Text>
+        </Box>
+      </Center>
     </BoxMotion>
   )
 }

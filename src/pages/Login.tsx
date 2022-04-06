@@ -13,15 +13,16 @@ import {
   InputRightElement,
   Divider,
   Image,
+  ModalOverlay,
+  Modal,
 } from "@chakra-ui/react"
 import { ViewOffIcon, ViewIcon } from "@chakra-ui/icons"
 import { motion } from "framer-motion"
 import { useState, useRef } from "react"
 
 import { isValidateEmail } from "../functions/index"
-import { authGoogle  } from "../actions/authActions"
-import {useAppDispatch} from "../redux/Store"
-
+import { authGoogle } from "../actions/authActions"
+import { useAppDispatch, useAppSelector } from "../redux/Store"
 
 const ButtonMotion = motion(Button)
 const ContainerMotion = motion(Container)
@@ -29,19 +30,15 @@ const BoxMotion = motion(Box)
 const HeadingMotion = motion(Heading)
 const TextMotion = motion(Text)
 
-
-
 const Login = () => {
-
   const [email, setEmail] = useState<String>("")
   const [password, setPassword] = useState<String>("")
   const [showPwd, setShowPwd] = useState<Boolean>(false)
   const [showErrorEmail, setShowErrorEmail] = useState<Boolean>(false)
   const [showErrorPwd, setShowErrorPwd] = useState<Boolean>(false)
 
-
-  const dispatch = useAppDispatch() 
-
+  const dispatch = useAppDispatch()
+  const { isFetching, isError } = useAppSelector((state) => state.authUser)
 
   return (
     <BoxMotion
@@ -49,8 +46,16 @@ const Login = () => {
       animate={{ opacity: 1, transition: { delay: 0.45 } }}
       d="flex"
       justifyContent="center"
-      bg=""
     >
+      <Modal isOpen={isFetching} onClose={() => isError}>
+        <ModalOverlay
+          bg="none"
+          backdropFilter="auto"
+          backdropInvert="30%"
+          backdropBlur="5px"
+        />
+      </Modal>
+
       <ContainerMotion
         style={{
           backdropFilter: "blur(10px)",
@@ -194,7 +199,9 @@ const Login = () => {
               whileTap={{ scale: 0.9 }}
               fontSize={18}
               h="50px"
-              onClick={() => {dispatch<any>(authGoogle())}}
+              onClick={() => {
+                dispatch<any>(authGoogle())
+              }}
             >
               <Image
                 m={2}
@@ -222,7 +229,6 @@ const Login = () => {
               whileTap={{ scale: 0.9 }}
               fontSize={18}
               h="50px"
-              
             >
               <Image
                 m={2}

@@ -16,7 +16,7 @@ export interface User {
 export interface InitialState {
   isFetching : boolean
   isError : boolean
-  userData ?: firebase.User | User
+  userData ?: firebase.User 
   isLogin : boolean
 }
  

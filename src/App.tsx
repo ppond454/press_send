@@ -1,21 +1,15 @@
-import { useAppSelector} from "./redux/Store"
 import {useEffect} from "react"
+import {auth} from "./config/firebase"
 
+import { useAppSelector , useAppDispatch} from "./redux/Store"
 import Layout from "./layouts/index"
 import PrivateRouter from "./routers/PrivateRouter"
 import PublicRouter from "./routers/PublicRouter"
 
 
 function App() {
+  const dispatch = useAppDispatch() 
   const { isLogin } = useAppSelector(state => state.authUser)
-  useEffect(() => {
-    if (isLogin) {
-      console.log("isLogin")
-    } else {
-      console.log("notLogin")
-    }
-
-  },[isLogin])
 
   return (
     <>
