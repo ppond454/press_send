@@ -13,7 +13,7 @@ const PrivateRouter = () => {
         <Routes  key={localtion.pathname} location={localtion} >
           <Route path="/" element={<Messager />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/addfriend" element={<AddFriend />} />
+          <Route path="/friend" element={<AddFriend />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AnimatePresence>

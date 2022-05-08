@@ -1,6 +1,13 @@
 import firebase from "firebase/compat/app"
-import 'firebase/compat/auth';
-import "firebase/compat/firestore"
+import { initializeApp } from "firebase/app"
+import {
+  getAuth,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  signInWithPopup,
+} from "firebase/auth"
+import { getFirestore } from "firebase/firestore"
+import { getStorage } from "firebase/storage"
 
 // const firebaseConfig = {
 //   apiKey: import.meta.env.VITE_API_KEY,
@@ -14,24 +21,28 @@ import "firebase/compat/firestore"
 // }
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD5NIF1aL148MnPGtkOaOLSMmeS07iuYak",
-  authDomain: "chats-a71da.firebaseapp.com",
-  databaseURL:
-    "https://chats-a71da-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "chats-a71da",
-  storageBucket: "chats-a71da.appspot.com",
-  messagingSenderId: "666119106094",
-  appId: "1:666119106094:web:e31484b7db3483a17279bf",
-  measurementId: "G-3S7CVNTZ67",
+  apiKey: "AIzaSyD_-pe_q5H4LJdIStV9CZsrmewwvqRBhoQ",
+  authDomain: "chats-c24c3.firebaseapp.com",
+  projectId: "chats-c24c3",
+  storageBucket: "chats-c24c3.appspot.com",
+  messagingSenderId: "684175761372",
+  appId: "1:684175761372:web:8d5ee80dba854c5f6bb919",
+  measurementId: "G-G24DBJ34GN"
 }
 
-firebase.initializeApp(firebaseConfig)
+const app = initializeApp(firebaseConfig)
 
-export const db = firebase.firestore()
-export const auth = firebase.auth()
-const provider = new firebase.auth.GoogleAuthProvider()
-provider.setCustomParameters({ prompt: "select_account" })
+export const db = getFirestore(app)
+export const auth = getAuth(app)
 
+const googleProvider = new GoogleAuthProvider()
+googleProvider.setCustomParameters({ prompt: "select_account" })
 
-export const signInWithGoogle = () => auth.signInWithPopup(provider)
+const gitProvider = new GithubAuthProvider()
+gitProvider.setCustomParameters({ prompt: "select_account" })
+
+export const signInWithGoogle = () => signInWithPopup(auth, googleProvider)
+export const signInWithGithub = () => signInWithPopup(auth, gitProvider)
+
 export default firebase
+

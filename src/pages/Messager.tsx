@@ -13,20 +13,45 @@ import {
   InputRightElement,
   Divider,
   Image,
-  Flex
+  Flex,
+  Grid,
 } from "@chakra-ui/react"
+import { useEffect, useState, useRef } from "react"
+import { Socket, io } from "socket.io-client"
 
+import { fetchUsers } from "../actions/fetchUserActions"
+import { selectUsers } from "../actions/selectUserActions"
+import { fetch_chats } from "../actions/fetchChatsAction"
 
-import Chats from "../containers/Chats"
+import { useAppSelector, useAppDispatch } from "../redux/Store"
+import ChatsUser from "../containers/Chats"
 import ChatList from "../containers/ChatList"
+import { info } from "../types/userType"
+import { fetch_lastMsg } from "../actions/lastMsgActions"
 
 type Props = {}
 
 const Messager = (props: Props) => {
+  const { info } = useAppSelector((state) => state.fetchUser)
+  const { userData } = useAppSelector((state) => state.authUser)
+  const { selectUser } = useAppSelector((state) => state.fetchSelectUser)
+  const socket = useRef<Socket>()
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    return dispatch<any>(fetchUsers(userData?.uid as string))
+  }, [])
+
+  useEffect(() => {
+    return dispatch<any>(
+        fetch_lastMsg(userData?.uid as string, info?.friend as info[])
+      )
+  }, [])
+
   return (
     <>
-      <ChatList/>
-      <Chats/>
+      <ChatList />
+      <ChatsUser />
     </>
   )
 }

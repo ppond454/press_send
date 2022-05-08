@@ -15,13 +15,14 @@ import {
   Image,
   ModalOverlay,
   Modal,
+  CircularProgress,
 } from "@chakra-ui/react"
 import { ViewOffIcon, ViewIcon } from "@chakra-ui/icons"
 import { motion } from "framer-motion"
 import { useState, useRef } from "react"
 
 import { isValidateEmail } from "../functions/index"
-import { authGoogle } from "../actions/authActions"
+import { authGoogle, authGit } from "../actions/authActions"
 import { useAppDispatch, useAppSelector } from "../redux/Store"
 
 const ButtonMotion = motion(Button)
@@ -53,7 +54,9 @@ const Login = () => {
           backdropFilter="auto"
           backdropInvert="30%"
           backdropBlur="5px"
-        />
+          d="flex"
+          justifyContent="center"
+        ></ModalOverlay>
       </Modal>
 
       <ContainerMotion
@@ -199,7 +202,8 @@ const Login = () => {
               whileTap={{ scale: 0.9 }}
               fontSize={18}
               h="50px"
-              onClick={() => {
+              onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                e.preventDefault()
                 dispatch<any>(authGoogle())
               }}
             >
@@ -229,6 +233,9 @@ const Login = () => {
               whileTap={{ scale: 0.9 }}
               fontSize={18}
               h="50px"
+              onClick={() => {
+                dispatch<any>(authGit())
+              }}
             >
               <Image
                 m={2}

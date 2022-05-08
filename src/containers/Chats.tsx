@@ -21,10 +21,22 @@ import {
   Flex,
   Avatar,
   Spacer,
-  Center
+  Center,
+  Container,
 } from "@chakra-ui/react"
 import { HamburgerIcon } from "@chakra-ui/icons"
-type Props = {}
+import { Socket, io } from "socket.io-client"
+
+import FormChat from "../components/FormChat"
+import BubbleChat from "../components/BubbleChat"
+import { info } from "../types/userType"
+import { Chats } from "../types/chatsType"
+import { fetch_chats, addChats } from "../actions/fetchChatsAction"
+import { useAppSelector, useAppDispatch } from "../redux/Store"
+
+type Props = {
+  // socket: Socket
+}
 
 const BoxMotion = motion(Box)
 const transition = {
@@ -42,23 +54,57 @@ const VariantMotion = {
   },
 }
 
-const Chats = (props: Props) => {
-  return (
-    <BoxMotion
-      w="100%"
-      // bg="#5f3100"
-      bg="whiteAlpha.400"
-      variants={VariantMotion}
-      initial="hidden"
-      animate="visible"
-      exit="close"
-      shadow="2xl"
-    >
-      <Flex d="none" bg="whiteAlpha.300" shadow="xl" p="8px">
+const ChatsUser = (props: Props) => {
+  const dispatch = useAppDispatch()
+  const socket = React.useRef<Socket>()
+  const [arrivalMessage, setArrivalMessage] = React.useState<Chats | null>(null)
+  const { chats } = useAppSelector((state) => state.fetchChat)
+  const { userData } = useAppSelector((state) => state.authUser)
+  const { selectUser } = useAppSelector((state) => state.fetchSelectUser)
+
+  React.useEffect(() => {
+    socket.current = io("ws://localhost:4000")
+    socket.current.on("getMessage", (data: Chats) => {
+      setArrivalMessage({ ...data })
+    })
+    return () => setArrivalMessage(null)
+  }, [])
+
+  React.useEffect(() => {
+    arrivalMessage &&
+      selectUser?.uid === arrivalMessage.from &&
+      dispatch<any>(addChats(chats, arrivalMessage))
+  }, [arrivalMessage, selectUser?.uid])
+
+  React.useEffect(() => {
+    return dispatch<any>(
+      fetch_chats(userData?.uid as string, selectUser?.uid as string)
+    )
+  }, [selectUser?.uid])
+
+  React.useEffect(() => {
+    let userId = userData?.uid as string
+    socket.current?.emit("addUser", userId)
+  }, [userData?.uid])
+
+  const noMessages = () => {
+    return (
+      <Center mt="200px">
+        <Box textAlign="center">
+          <Image alt="messages" src="../../asset/messages.svg" />
+          <Text>let's start Chat</Text>
+        </Box>
+      </Center>
+    )
+  }
+
+  const ChatBar = (selectUser: info) => {
+    return (
+      <Flex bg="whiteAlpha.300" shadow="xl" p="10px" h="8vh">
         <Box d="flex">
-          <Avatar borderColor="whiteAlpha.400" />
+          <Avatar src={selectUser?.photoURL} borderColor="whiteAlpha.400" />
           <Heading color="blackAlpha.900" mx="10px" my="auto" size="sm">
-            Name
+            {selectUser?.name}
           </Heading>
         </Box>
         <Spacer />
@@ -80,14 +126,33 @@ const Chats = (props: Props) => {
           </Menu>
         </Box>
       </Flex>
-      <Center m="300px" >
-        <Box textAlign="center" >
-        <Image  w="150px" alt="messages"  src="../../asset/messages.svg" />
-        <Text>No messages</Text>
-        </Box>
-      </Center>
-    </BoxMotion>
+    )
+  }
+  return (
+    <>
+      <BoxMotion
+        flexdirection="column"
+        w="100%"
+        // bg="#5f3100"
+        bg="whiteAlpha.400"
+        variants={VariantMotion}
+        initial="hidden"
+        animate="visible"
+        exit="close"
+        shadow="2xl"
+        minH="100%"
+      >
+        {selectUser && ChatBar(selectUser)}
+        {chats.length === 0 && noMessages()}
+        {chats.length > 0 && (
+          <Box d="flex" flexDirection="column" overflowY="auto" h="82vh">
+            {<BubbleChat />}
+          </Box>
+        )}
+        {selectUser && <FormChat socket={socket.current as Socket} />}
+      </BoxMotion>
+    </>
   )
 }
 
-export default Chats
+export default ChatsUser

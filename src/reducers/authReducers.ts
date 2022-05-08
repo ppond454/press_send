@@ -1,4 +1,4 @@
-import { Actions, InitialState } from "../types/index"
+import { Actions, InitialState } from "../types/authType"
 
 const initialState: InitialState = {
   userData: undefined,
