@@ -21,13 +21,7 @@ import { getStorage } from "firebase/storage"
 // }
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD_-pe_q5H4LJdIStV9CZsrmewwvqRBhoQ",
-  authDomain: "chats-c24c3.firebaseapp.com",
-  projectId: "chats-c24c3",
-  storageBucket: "chats-c24c3.appspot.com",
-  messagingSenderId: "684175761372",
-  appId: "1:684175761372:web:8d5ee80dba854c5f6bb919",
-  measurementId: "G-G24DBJ34GN"
+
 }
 
 const app = initializeApp(firebaseConfig)
