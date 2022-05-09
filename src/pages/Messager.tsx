@@ -35,7 +35,7 @@ const Messager = (props: Props) => {
   const { info } = useAppSelector((state) => state.fetchUser)
   const { userData } = useAppSelector((state) => state.authUser)
   const { selectUser } = useAppSelector((state) => state.fetchSelectUser)
-  const socket = useRef<Socket>()
+
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -43,9 +43,9 @@ const Messager = (props: Props) => {
   }, [])
 
   useEffect(() => {
-    return dispatch<any>(
-        fetch_lastMsg(userData?.uid as string, info?.friend as info[])
-      )
+    dispatch<any>(
+      fetch_lastMsg(userData?.uid as string, info?.friend as info[])
+    )
   }, [])
 
   return (

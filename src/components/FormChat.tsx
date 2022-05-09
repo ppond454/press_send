@@ -28,13 +28,15 @@ const FormChat = ({ socket }: Props) => {
   let text = React.useRef<HTMLInputElement>(null)
   const dispatch = useAppDispatch()
   const { chats } = useAppSelector((state) => state.fetchChat)
-
+  let id = React.useCallback(
+    () => generateID(userData?.uid as string, selectUser?.uid as string),
+    [selectUser?.uid, userData?.uid]
+  )
   const handleSubmit = async () => {
     try {
       if (!text.current?.value) return
-
-      let id = generateID(userData?.uid as string, selectUser?.uid as string)
-      let encry_text = encrypt(id, text.current?.value)
+      let _id =id()
+      let encry_text = encrypt(_id, text.current?.value)
       let chat: Chats = {
         from: userData?.uid as string,
         to: selectUser?.uid as string,

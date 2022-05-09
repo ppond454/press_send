@@ -69,7 +69,7 @@ const checkUser = async (user: firebase.User) => {
         uid: user.uid,
         name: user.displayName,
         email: user.providerData[0]?.email || user.email,
-        createdAt: Timestamp.fromDate(new Date()),
+        createdAt: Timestamp.fromDate(new Date()).toDate(),
         isOnline: true,
         photoURL: user.photoURL,
         requestedBy: [],

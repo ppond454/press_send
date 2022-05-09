@@ -24,7 +24,7 @@ import {
   FETCHING_CHATS,
   ChatsActions,
 } from "../types/chatsType"
-import { generateID } from "../functions/index"
+import { generateID , decrypt } from "../functions/index"
 
 export const fetching_chats = (): ChatsActions => {
   return {
@@ -56,6 +56,7 @@ export const fetch_chats = (myUid: string, friendId: string) => {
     dispatch(fetching_chats())
     try {
       if (!friendId) return null
+  
       let id: string = generateID(myUid, friendId)
       const msgsRef = collection(db, "messages", id, "chats")
       const q = query(msgsRef, orderBy("createdAt", "asc"))
@@ -65,7 +66,7 @@ export const fetch_chats = (myUid: string, friendId: string) => {
       const querySnapshot = await getDocs(q)
       querySnapshot.forEach((doc) => {
         if (doc.exists()) {
-          msgs.push({...doc.data() , createdAt: doc.data().createdAt.toDate() } as Chats)
+          msgs.push({...doc.data() , createdAt: doc.data().createdAt.toDate() , text:decrypt(id,doc.data().text)  } as Chats)
         }
       })
 

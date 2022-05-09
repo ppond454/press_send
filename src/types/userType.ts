@@ -10,7 +10,7 @@ export interface info {
 }
 
 export interface Users {
-  createAt: Date
+  createdAt: Date
   email: string
   name: string
   isOnline: boolean
@@ -19,6 +19,9 @@ export interface Users {
   requestedBy: info[] 
   requestedTo: info[] 
   friend: info[] 
+  emailVerified?: boolean
+  lastLoginAt?: Date
+
 }
 
 export interface InitialState {

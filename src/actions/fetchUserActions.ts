@@ -90,8 +90,16 @@ export const fetchUsers = (uid: string) => {
         let info: Users[] = []
         querySnapshot.forEach((doc) => {
           if (doc.exists()) {
-            if (doc.data().uid !== uid) users.push(doc.data() as Users)
-            if (doc.data().uid === uid) info.push(doc.data() as Users)
+            if (doc.data().uid !== uid)
+              users.push({
+                ...doc.data(),
+                createdAt: doc.data().createdAt.toDate(),
+              } as Users)
+            if (doc.data().uid === uid)
+              info.push({
+                ...doc.data(),
+                createdAt: doc.data().createdAt.toDate(),
+              } as Users)
           }
         })
 

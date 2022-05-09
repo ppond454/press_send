@@ -9,6 +9,10 @@ import App from "./App"
 import Store, { Persistor } from "./redux/Store"
 import { theme } from "./theme/index"
 
+import "@fontsource/playfair-display/700.css"
+import "@fontsource/source-sans-pro/"
+import "@fontsource/ubuntu-mono"
+
 ReactDOM.render(
   <StrictMode>
     <Provider store={Store}>

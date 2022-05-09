@@ -79,6 +79,7 @@ const Friend = (props: Props) => {
               mr="10px"
               onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                 e.preventDefault()
+                Navigate(`/profile/${user.uid}`,{ replace: true })
               }}
             >
               <Search2Icon mr="5px" /> view profile

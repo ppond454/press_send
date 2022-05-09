@@ -1,5 +1,6 @@
 import React from "react"
 import { motion } from "framer-motion"
+import { useNavigate } from "react-router-dom"
 import {
   Box,
   Menu,
@@ -23,6 +24,7 @@ import {
   Spacer,
   Center,
   Container,
+  AvatarBadge,
 } from "@chakra-ui/react"
 import { HamburgerIcon } from "@chakra-ui/icons"
 import { Socket, io } from "socket.io-client"
@@ -61,7 +63,8 @@ const ChatsUser = (props: Props) => {
   const { chats } = useAppSelector((state) => state.fetchChat)
   const { userData } = useAppSelector((state) => state.authUser)
   const { selectUser } = useAppSelector((state) => state.fetchSelectUser)
-
+  const { users } = useAppSelector((state) => state.fetchUser)
+  const Navigate = useNavigate()
   React.useEffect(() => {
     socket.current = io("ws://localhost:4000")
     socket.current.on("getMessage", (data: Chats) => {
@@ -80,7 +83,7 @@ const ChatsUser = (props: Props) => {
     return dispatch<any>(
       fetch_chats(userData?.uid as string, selectUser?.uid as string)
     )
-  }, [selectUser?.uid])
+  }, [selectUser?.uid, userData?.uid])
 
   React.useEffect(() => {
     let userId = userData?.uid as string
@@ -99,11 +102,23 @@ const ChatsUser = (props: Props) => {
   }
 
   const ChatBar = (selectUser: info) => {
+    const data = users.find((val) => selectUser.uid === val.uid)
     return (
       <Flex bg="whiteAlpha.300" shadow="xl" p="10px" h="8vh">
         <Box d="flex">
-          <Avatar src={selectUser?.photoURL} borderColor="whiteAlpha.400" />
-          <Heading color="blackAlpha.900" mx="10px" my="auto" size="sm">
+          <Avatar src={selectUser?.photoURL} borderColor="whiteAlpha.400">
+            <AvatarBadge
+              borderColor={data?.isOnline ? "green.500" : "papayawhip"}
+              bg={data?.isOnline ? "green.500" : "tomato"}
+              boxSize="1em"
+            />
+          </Avatar>
+          <Heading
+            color="blackAlpha.900"
+            mx="10px"
+            my="auto"
+            fontSize={{ base: "sm", md: "lg" }}
+          >
             {selectUser?.name}
           </Heading>
         </Box>
@@ -117,7 +132,7 @@ const ChatsUser = (props: Props) => {
               <MenuItem
                 as="button"
                 onClick={() => {
-                  console.log("View")
+                  Navigate(`/profile/${selectUser.uid}`, { replace: true })
                 }}
               >
                 View Profile

@@ -12,7 +12,6 @@ const BoxMotion = motion(Box)
 
 const customLink = ({ href, children, ...props }: Props) => {
   const location = useLocation()
-
   let active: boolean = href === location.pathname
 
   return (

@@ -18,7 +18,8 @@ import {
 } from "firebase/firestore"
 import { db } from "../config/firebase"
 import { Chats } from "../types/chatsType"
-import  CryptoJS,{ AES } from "crypto-js"
+import CryptoJS, { AES } from "crypto-js"
+import { async } from "@firebase/util"
 export const isValidateEmail = (email: string): boolean => {
   const re =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
@@ -106,7 +107,7 @@ export const declineFriend = async (from: info, to: info) => {
 }
 
 export const sendMsg = async (chat: Chats) => {
-  const id: string = generateID(chat.from, chat.to)
+  const id: string = await generateID(chat.from, chat.to)
 
   await addDoc(collection(db, "messages", id, "chats"), {
     ...chat,
@@ -120,15 +121,16 @@ export const sendMsg = async (chat: Chats) => {
   })
 }
 
-export const generateID = (me: string, friend: string) => {
+export const generateID =  (me: string, friend: string) => {
   const id = me > friend ? `${me + friend}` : `${friend + me}`
   return id
 }
 
-export const encrypt = (id: string, text: string): string => {
-  return AES.encrypt(text, id).toString()
+export const encrypt =  (id: string, text: string):string  => {
+  let msg = AES.encrypt(text, id).toString()
+  return msg
 }
-export const decrypt = (id: string, text: string): string => {
+export const decrypt =  (id: string, text: string): string => {
   let msg = AES.decrypt(text, id).toString(CryptoJS.enc.Utf8)
   return msg
 }
