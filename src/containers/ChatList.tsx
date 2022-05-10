@@ -22,6 +22,9 @@ import {
   Spacer,
   AvatarBadge,
   Badge,
+  Skeleton,
+  SkeletonText,
+  SkeletonCircle,
 } from "@chakra-ui/react"
 
 import { SearchIcon } from "@chakra-ui/icons"
@@ -35,7 +38,7 @@ import { fetch_chats } from "../actions/fetchChatsAction"
 
 import { info, Users } from "../types/userType"
 import { lastMsg, IlastMsgUser } from "../types/unreadChatsTypes"
-import { generateID, decrypt } from "../functions/index"
+import { generateID, unreadUpdate } from "../functions/index"
 
 type Props = {}
 
@@ -79,13 +82,13 @@ const ChatList = (props: Props) => {
   const { selectUser } = useAppSelector((state) => state.fetchSelectUser)
   const { info, users } = useAppSelector((state) => state.fetchUser)
   const { userData } = useAppSelector((state) => state.authUser)
-  const { lastMsg } = useAppSelector((state) => state.fetchUnread)
+  const { lastMsg, isFetching } = useAppSelector((state) => state.fetchUnread)
   // console.log(lastMsg)
 
   const renderList = (info: IlastMsgUser, i: number, myUid: string) => {
     let id = generateID(myUid, info.uid)
-    let text = decrypt(id, info.lastMsg.text)
     const data = users.find((user) => user.uid === info.uid)
+    // let text = info.lastMsg.text
     return (
       <Flex
         cursor="pointer"
@@ -105,29 +108,42 @@ const ChatList = (props: Props) => {
         onClick={async (e) => {
           e.preventDefault()
           await dispatch<any>(
-            selectUsers({
+            selectUsers(myUid ,{
               name: info.name,
               photoURL: info.photoURL,
               uid: info.uid,
             })
           )
-          // await dispatch<any>(fetch_chats(myUid, info.uid))
         }}
       >
         <Box px="5px" my="auto">
-          <Avatar src={info.photoURL}>
-            <AvatarBadge
-              borderColor={data?.isOnline ? "green.500" : "papayawhip"}
-              bg={data?.isOnline ? "green.500" : "tomato"}
-              boxSize="1em"
-            />
-          </Avatar>
+          <Skeleton
+            borderRadius="50%"
+            startColor="#ffeed4"
+            endColor=""
+            isLoaded={!isFetching}
+          >
+            <Avatar src={info.photoURL}>
+              <AvatarBadge
+                borderColor={data?.isOnline ? "green.100" : "papayawhip"}
+                bg={data?.isOnline ? "green.500" : "tomato"}
+                boxSize="1em"
+              />
+            </Avatar>
+          </Skeleton>
         </Box>
         <Box my="auto" w="100vw">
           <Flex>
-            <Heading ml="5px" fontSize={{ base: "12px", md: "md" }}>
-              {info.name}
-            </Heading>
+            <Skeleton
+              borderRadius="20px"
+              startColor="#ffeed4"
+              endColor=""
+              isLoaded={!isFetching}
+            >
+              <Heading ml="5px" fontSize={{ base: "12px", md: "md" }}>
+                {info.name}
+              </Heading>
+            </Skeleton>
             <Spacer />
             <Badge
               d={
@@ -139,7 +155,6 @@ const ChatList = (props: Props) => {
               borderRadius="10px"
               colorScheme="green"
               justifyContent="center"
-          
             >
               New
             </Badge>
@@ -152,15 +167,29 @@ const ChatList = (props: Props) => {
             }
           >
             <Flex ml="10px" w="50%">
-              <Text fontSize="14px">
-                {`${text.substring(0, 10)}`} {text.length > 9 && "..."}
-              </Text>
+              <Skeleton
+                borderRadius="20px"
+                startColor="#ffeed4"
+                endColor=""
+                isLoaded={!isFetching}
+              >
+                <Text fontSize="14px">
+                  {`${info.lastMsg.text.substring(0, 10)}`} {info.lastMsg.text.length > 9 && "..."}
+                </Text>
+              </Skeleton>
             </Flex>
             <Spacer />
             <Flex>
-              <Text fontSize="14px" mr="4px">
-                {moment(info?.lastMsg.createdAt).fromNow()}
-              </Text>
+              <Skeleton
+                borderRadius="20px"
+                startColor="#ffeed4"
+                endColor=""
+                isLoaded={!isFetching}
+              >
+                <Text fontSize="14px" mr="4px">
+                  {moment(info?.lastMsg.createdAt).fromNow()}
+                </Text>
+              </Skeleton>
             </Flex>
           </Flex>
         </Box>
@@ -190,8 +219,9 @@ const ChatList = (props: Props) => {
           </InputLeftAddon>
           <Input placeholder="Search" />
         </InputGroup>
+
         {lastMsg &&
-          lastMsg.map((info, i) => {
+          lastMsg.map( (info, i) => {
             if (info.uid === userData?.uid) return null
             return renderList(info, i, userData?.uid as string)
           })}

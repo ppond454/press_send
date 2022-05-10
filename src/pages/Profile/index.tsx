@@ -35,7 +35,7 @@ const VariantMotion = {
 const Profile = (props: Props) => {
   const { userData } = useAppSelector((state) => state.authUser)
   const { info } = useAppSelector((state) => state.fetchUser)
-
+  
   return (
     <>
       <BoxMotion
@@ -66,9 +66,9 @@ const Profile = (props: Props) => {
         </Flex>
         <Spacer />
         <Box m="auto" mr="30px">
-          <Heading maxW="300px" size="md">{userData?.displayName}</Heading>
+          <Heading maxW="300px" size="md">{info?.name || userData?.displayName}</Heading>
           <Flex>
-            <strong>Email :</strong> <Text ml="5px">{userData?.email}</Text>{" "}
+            <strong>Email :</strong> <Text ml="5px">{userData?.email|| "no specified"}</Text>{" "}
           </Flex>
           <Flex>
             <strong>Created At :</strong>

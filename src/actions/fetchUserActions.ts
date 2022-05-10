@@ -82,8 +82,8 @@ export const fetchUsers = (uid: string) => {
   return async (dispatch: Dispatch<fetchUserActions>) => {
     dispatch(fetching())
     try {
-      const usersRef = collection(db, "users")
-      const q = query(usersRef, where("uid", "not-in", [uid]))
+      const usersRef =  collection(db, "users")
+      // const q = query(usersRef, where("uid", "not-in", [uid]))
 
       onSnapshot(usersRef, (querySnapshot) => {
         let users: Users[] = []

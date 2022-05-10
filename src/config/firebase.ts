@@ -1,5 +1,5 @@
-import firebase from "firebase/compat/app"
-import { initializeApp } from "firebase/app"
+import firebase  from "firebase/compat/app"
+import { FirebaseOptions, initializeApp  } from "firebase/app"
 import {
   getAuth,
   GoogleAuthProvider,
@@ -8,21 +8,18 @@ import {
 } from "firebase/auth"
 import { getFirestore } from "firebase/firestore"
 import { getStorage } from "firebase/storage"
+// import "dotenv/config"
 
-// const firebaseConfig = {
-//   apiKey: import.meta.env.VITE_API_KEY,
-//   authDomain:import.meta.env.VITE_AUTH_DOMAIN,
-//   databaseURL:import.meta.env.VITE_DATA_BASE_URL,
-//   projectId: import.meta.env.VITE_PROJECT_ID,
-//   storageBucket: import.meta.env.VITE_STORANGE_BUCKET,
-//   messagingSenderId: import.meta.env.VITE_MESSAGEING_SENDER_ID,
-//   appId: import.meta.env.VITE_APP_ID,
-//   measurementId: import.meta.env.VITE_MEASUREMENT_ID,
-// }
-
-const firebaseConfig = {
-
+const firebaseConfig : FirebaseOptions = {
+  apiKey: import.meta.env.VITE_API_KEY  as string,
+  authDomain:import.meta.env.VITE_AUTH_DOMAIN  as string,
+  projectId: import.meta.env.VITE_PROJECT_ID as string,
+  storageBucket: import.meta.env.VITE_STORANGE_BUCKET as string,
+  messagingSenderId: import.meta.env.VITE_MESSAGEING_SENDER_ID as string,
+  appId: import.meta.env.VITE_APP_ID as string , 
+  measurementId: import.meta.env.VITE_MEASUREMENT_ID as string,
 }
+
 
 const app = initializeApp(firebaseConfig)
 

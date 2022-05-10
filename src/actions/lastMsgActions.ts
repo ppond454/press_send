@@ -13,6 +13,7 @@ import {
   updateDoc,
   QuerySnapshot,
   limit,
+  getDocs,
 } from "firebase/firestore"
 import { db } from "../config/firebase"
 
@@ -27,7 +28,7 @@ import {
   IlastMsgUser,
 } from "../types/unreadChatsTypes"
 
-import { generateID } from "../functions/index"
+import { generateID, decrypt } from "../functions/index"
 
 export const fetching_unread = (): unreadActions => {
   return {
@@ -54,7 +55,7 @@ export const clear_unread = (): unreadActions => {
   }
 }
 
-export const fetch_lastMsg = (myUid: string, friend: info[]) => {
+export const fetch_lastMsg = (myUid: string) => {
   return async (dispatch: Dispatch<unreadActions>) => {
     dispatch(fetching_unread())
     try {
@@ -62,7 +63,7 @@ export const fetch_lastMsg = (myUid: string, friend: info[]) => {
 
       const msgsRef = collection(db, "lastMsg")
       const q = query(msgsRef, orderBy("createdAt", "asc"))
-      const unsub = onSnapshot(q, (querySnapshot: QuerySnapshot) => {
+      onSnapshot(q, async (querySnapshot: QuerySnapshot) => {
         let lastMsg: lastMsg[] = []
         querySnapshot.forEach((doc) => {
           if (doc.exists()) {
@@ -73,17 +74,35 @@ export const fetch_lastMsg = (myUid: string, friend: info[]) => {
           }
         })
 
+        const getFriends = await getDocs(
+          query(collection(db, "users"), where("uid", "in", [myUid]))
+        )
+        let friends: info[] = []
+        getFriends.forEach((doc) => {
+          if (doc.exists()) {
+            friends = doc.data().friend as info[]
+          }
+        })
+
         let _last = lastMsg.filter((msg) => {
           return msg.to === myUid || msg.from === myUid
         })
         let data: IlastMsgUser[] = []
-        for (let i = 0; i < friend.length; i++) {
+
+        for (let i = 0; i < friends.length; i++) {
           for (let j = 0; j < _last.length; j++) {
             if (
-              friend[i].uid === _last[j].to ||
-              friend[i].uid === _last[j].from
+              friends[i].uid === _last[j].to ||
+              friends[i].uid === _last[j].from
             ) {
-              let _data = { ...friend[i], lastMsg: _last[j] as lastMsg }
+              let id = generateID(myUid, friends[i].uid)
+              let _data = {
+                ...friends[i],
+                lastMsg: {
+                  ..._last[j],
+                  text: await decrypt(id, _last[j].text),
+                } as lastMsg,
+              }
               data.push(_data)
             }
           }
@@ -95,7 +114,6 @@ export const fetch_lastMsg = (myUid: string, friend: info[]) => {
         )
 
         dispatch(fetched_unread(data))
-        return () => unsub()
       })
     } catch (e) {
       dispatch(error_unread())

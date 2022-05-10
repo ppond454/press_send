@@ -35,6 +35,7 @@ import { info } from "../types/userType"
 import { Chats } from "../types/chatsType"
 import { fetch_chats, addChats } from "../actions/fetchChatsAction"
 import { useAppSelector, useAppDispatch } from "../redux/Store"
+import { decrypt, generateID } from "../functions"
 
 type Props = {
   // socket: Socket
@@ -57,6 +58,8 @@ const VariantMotion = {
 }
 
 const ChatsUser = (props: Props) => {
+  const ENDPOINT =
+    import.meta.env.VITE_SOCKET_ENDPOINT || ("ws://localhost:4000/" as string)
   const dispatch = useAppDispatch()
   const socket = React.useRef<Socket>()
   const [arrivalMessage, setArrivalMessage] = React.useState<Chats | null>(null)
@@ -65,10 +68,17 @@ const ChatsUser = (props: Props) => {
   const { selectUser } = useAppSelector((state) => state.fetchSelectUser)
   const { users } = useAppSelector((state) => state.fetchUser)
   const Navigate = useNavigate()
+  const id = React.useCallback(
+    () => generateID(userData?.uid as string, selectUser?.uid as string),
+    [selectUser?.uid, userData?.uid]
+  )
+
   React.useEffect(() => {
-    socket.current = io("ws://localhost:4000")
+    socket.current = io(ENDPOINT as string)
     socket.current.on("getMessage", (data: Chats) => {
-      setArrivalMessage({ ...data })
+      decrypt(id(), data.text).then((text) =>
+        setArrivalMessage({ ...data, text })
+      )
     })
     return () => setArrivalMessage(null)
   }, [])
@@ -80,9 +90,10 @@ const ChatsUser = (props: Props) => {
   }, [arrivalMessage, selectUser?.uid])
 
   React.useEffect(() => {
-    return dispatch<any>(
-      fetch_chats(userData?.uid as string, selectUser?.uid as string)
-    )
+    if (selectUser?.uid)
+      return dispatch<any>(
+        fetch_chats(userData?.uid as string, selectUser?.uid as string)
+      )
   }, [selectUser?.uid, userData?.uid])
 
   React.useEffect(() => {
@@ -162,6 +173,7 @@ const ChatsUser = (props: Props) => {
         {chats.length > 0 && (
           <Box d="flex" flexDirection="column" overflowY="auto" h="82vh">
             {<BubbleChat />}
+            <AlwaysScrollToBottom />
           </Box>
         )}
         {selectUser && <FormChat socket={socket.current as Socket} />}
@@ -171,3 +183,11 @@ const ChatsUser = (props: Props) => {
 }
 
 export default ChatsUser
+
+const AlwaysScrollToBottom = () => {
+  const elementRef = React.useRef<HTMLDivElement>()
+  React.useEffect(() =>
+    elementRef.current?.scrollIntoView({ behavior: "smooth" })
+  )
+  return <div ref={elementRef as React.MutableRefObject<HTMLDivElement>} />
+}

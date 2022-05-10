@@ -16,7 +16,7 @@ import { useAppSelector, useAppDispatch } from "../redux/Store"
 import { Chats } from "../types/chatsType"
 import { sendMsg } from "../functions/index"
 import { addChats } from "../actions/fetchChatsAction"
-import { encrypt, generateID } from "../functions/index"
+import { encrypt, generateID, unreadUpdate } from "../functions/index"
 
 type Props = {
   socket: Socket
@@ -35,8 +35,8 @@ const FormChat = ({ socket }: Props) => {
   const handleSubmit = async () => {
     try {
       if (!text.current?.value) return
-      let _id =id()
-      let encry_text = encrypt(_id, text.current?.value)
+      let _id = id()
+      let encry_text = await encrypt(_id, text.current?.value)
       let chat: Chats = {
         from: userData?.uid as string,
         to: selectUser?.uid as string,
@@ -45,8 +45,15 @@ const FormChat = ({ socket }: Props) => {
         media: "" as string,
       }
       await sendMsg(chat)
+      let _chat: Chats = {
+        from: userData?.uid as string,
+        to: selectUser?.uid as string,
+        text: text.current?.value,
+        createdAt: Timestamp.fromDate(new Date()).toDate(),
+        media: "" as string,
+      }
       socket.emit("sendMessage", { ...chat })
-      dispatch<any>(addChats(chats, chat))
+      dispatch<any>(addChats(chats, _chat))
       text.current.value = ""
     } catch (error) {
       throw error
@@ -77,6 +84,9 @@ const FormChat = ({ socket }: Props) => {
             handleSubmit()
           }
         }}
+        onClick={ async() =>
+         await unreadUpdate(userData?.uid as string, selectUser?.uid as string)
+        }
       />
 
       <Button

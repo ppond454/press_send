@@ -23,7 +23,7 @@ import {
   selectAction,
 } from "../types/selectChatType"
 import { info, Users } from "../types/userType"
-import { generateID } from "../functions/index"
+import { generateID, unreadUpdate } from "../functions/index"
 import {io ,Socket} from "socket.io-client"
 
 
@@ -52,12 +52,13 @@ export const clear_selecting = (): selectAction => {
   }
 }
 
-export const selectUsers = (friends: info) => {
+export const selectUsers = (myUid: string ,friends: info) => {
   return async (dispatch: Dispatch<selectAction>) => {
     if (!friends) return null
     dispatch(selecting())
     try {
       dispatch(selected(friends))
+      await unreadUpdate(myUid, friends.uid)
     } catch (e) {
       dispatch(error_selecting())
       throw e

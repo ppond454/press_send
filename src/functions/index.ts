@@ -10,13 +10,14 @@ import {
   setDoc,
   doc,
   getDocs,
+  getDoc,
   updateDoc,
   QuerySnapshot,
   arrayUnion,
   arrayRemove,
   deleteField,
 } from "firebase/firestore"
-import { db } from "../config/firebase"
+import firebase, { db, auth } from "../config/firebase"
 import { Chats } from "../types/chatsType"
 import CryptoJS, { AES } from "crypto-js"
 import { async } from "@firebase/util"
@@ -107,7 +108,7 @@ export const declineFriend = async (from: info, to: info) => {
 }
 
 export const sendMsg = async (chat: Chats) => {
-  const id: string = await generateID(chat.from, chat.to)
+  const id: string = generateID(chat.from, chat.to)
 
   await addDoc(collection(db, "messages", id, "chats"), {
     ...chat,
@@ -121,16 +122,24 @@ export const sendMsg = async (chat: Chats) => {
   })
 }
 
-export const generateID =  (me: string, friend: string) => {
+export const generateID = (me: string, friend: string) => {
   const id = me > friend ? `${me + friend}` : `${friend + me}`
   return id
 }
 
-export const encrypt =  (id: string, text: string):string  => {
+export const encrypt = async (id: string, text: string) => {
   let msg = AES.encrypt(text, id).toString()
   return msg
 }
-export const decrypt =  (id: string, text: string): string => {
+export const decrypt = async (id: string, text: string) => {
   let msg = AES.decrypt(text, id).toString(CryptoJS.enc.Utf8)
   return msg
+}
+
+export const unreadUpdate = async (myUid: string, friendUid: string) => {
+  let id = generateID(myUid, friendUid)
+  const docSnap = await getDoc(doc(db, "lastMsg", id))
+  if (docSnap.data() && docSnap.data()?.from !== myUid) {
+    await updateDoc(doc(db, "lastMsg", id), { unread: false })
+  }
 }

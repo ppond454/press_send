@@ -35,17 +35,14 @@ const Messager = (props: Props) => {
   const { info } = useAppSelector((state) => state.fetchUser)
   const { userData } = useAppSelector((state) => state.authUser)
   const { selectUser } = useAppSelector((state) => state.fetchSelectUser)
-
+  const { lastMsg } = useAppSelector((state) => state.fetchUnread)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    return dispatch<any>(fetchUsers(userData?.uid as string))
+     dispatch<any>(fetchUsers(userData?.uid as string))
   }, [])
-
   useEffect(() => {
-    dispatch<any>(
-      fetch_lastMsg(userData?.uid as string, info?.friend as info[])
-    )
+     dispatch<any>(fetch_lastMsg(userData?.uid as string))
   }, [])
 
   return (

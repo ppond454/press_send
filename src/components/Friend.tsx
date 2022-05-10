@@ -93,7 +93,7 @@ const Friend = (props: Props) => {
                 e: React.MouseEvent<HTMLButtonElement, MouseEvent>
               ) => {
                 e.preventDefault()
-                await dispatch<any>(selectUsers(user))
+                await dispatch<any>(selectUsers(userData?.uid as string,user))
                 // await dispatch<any>(fetch_chats(info.uid, user.uid))
                 Navigate("/", { replace: true })
               }}

@@ -12,6 +12,10 @@ import {
   updateDoc,
   QuerySnapshot,
 } from "firebase/firestore"
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "firebase/auth"
 import firebase, {
   signInWithGoogle,
   signInWithGithub,
@@ -54,7 +58,7 @@ export const signout = (): Actions => ({
 //   }
 // }
 
-const checkUser = async (user: firebase.User) => {
+const checkUser = async (user: firebase.User, name?: string) => {
   try {
     let users: any = []
     const querySnapshot = await getDocs(
@@ -67,7 +71,7 @@ const checkUser = async (user: firebase.User) => {
     if (users.length === 0) {
       await setDoc(doc(db, "users", user.uid), {
         uid: user.uid,
-        name: user.displayName,
+        name: name || user.displayName,
         email: user.providerData[0]?.email || user.email,
         createdAt: Timestamp.fromDate(new Date()).toDate(),
         isOnline: true,
@@ -113,6 +117,39 @@ export const authGit = () => {
       })
     } catch (err) {
       dispatch(error_auth())
+      throw err
+    }
+  }
+}
+
+export const authEmail = (email: string, pwd: string) => {
+  return async (dispatch: Dispatch<Actions>) => {
+    dispatch(authing())
+    try {
+      await signInWithEmailAndPassword(auth, email, pwd).then(() => {
+        const user =  auth.currentUser as firebase.User
+        dispatch(authed(user))
+      })
+    } catch (err ) {
+      dispatch(error_auth())
+      alert(err)
+      throw err
+    }
+  }
+}
+
+export const signup =  (name: string, pwd: string, email: string) => {
+  return async (dispatch: Dispatch<Actions>) => {
+    dispatch(authing())
+    try {
+      await createUserWithEmailAndPassword(auth, email, pwd).then( () => {
+        const user = auth.currentUser as firebase.User
+         checkUser(user, name)
+        dispatch(authed(user))
+      })
+    } catch (err) {
+      dispatch(error_auth())
+      alert(err)
       throw err
     }
   }

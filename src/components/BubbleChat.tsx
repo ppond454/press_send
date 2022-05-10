@@ -30,19 +30,6 @@ const BubbleChat = (props: Props) => {
   const { chats } = useAppSelector((state) => state.fetchChat)
   const { userData } = useAppSelector((state) => state.authUser)
   const { selectUser } = useAppSelector((state) => state.fetchSelectUser)
-  const scrollRef = React.createRef<HTMLDivElement>()
-
-  React.useEffect(() => {
-    setTimeout(() => {
-      scrollRef.current?.scrollIntoView({ behavior: "smooth" })
-    }, 750)
-  }, [chats])
-
-  React.useEffect(() => {
-    setTimeout(() => {
-      scrollRef.current?.scrollIntoView({ behavior: "smooth" })
-    }, 750)
-  }, [])
 
   let chatMock = chats as Chats[]
   
@@ -53,7 +40,6 @@ const BubbleChat = (props: Props) => {
           let text = chat.text  
           return (
             <Flex
-              ref={scrollRef}
               key={i}
               p="10px"
               shadow="xl"
@@ -96,3 +82,4 @@ const BubbleChat = (props: Props) => {
   )
 }
 export default BubbleChat
+

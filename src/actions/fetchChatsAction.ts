@@ -64,9 +64,9 @@ export const fetch_chats = (myUid: string, friendId: string) => {
       let msgs: Chats[] = []
 
       const querySnapshot = await getDocs(q)
-      querySnapshot.forEach((doc) => {
+      querySnapshot.forEach(async (doc) => {
         if (doc.exists()) {
-          msgs.push({...doc.data() , createdAt: doc.data().createdAt.toDate() , text:decrypt(id,doc.data().text)  } as Chats)
+          msgs.push({...doc.data() , createdAt: doc.data().createdAt.toDate() , text: await decrypt(id,doc.data().text)  } as Chats)
         }
       })
 
