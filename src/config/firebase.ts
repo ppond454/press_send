@@ -11,13 +11,13 @@ import { getStorage } from "firebase/storage"
 // import "dotenv/config"
 
 const firebaseConfig : FirebaseOptions = {
-  apiKey: import.meta.env.VITE_API_KEY  as string,
-  authDomain:import.meta.env.VITE_AUTH_DOMAIN  as string,
-  projectId: import.meta.env.VITE_PROJECT_ID as string,
-  storageBucket: import.meta.env.VITE_STORANGE_BUCKET as string,
-  messagingSenderId: import.meta.env.VITE_MESSAGEING_SENDER_ID as string,
-  appId: import.meta.env.VITE_APP_ID as string , 
-  measurementId: import.meta.env.VITE_MEASUREMENT_ID as string,
+  apiKey: import.meta.env.VITE_API_KEY as string || ""  ,
+  authDomain:import.meta.env.VITE_AUTH_DOMAIN  as string || "" ,
+  projectId: import.meta.env.VITE_PROJECT_ID as string || "" ,
+  storageBucket: import.meta.env.VITE_STORANGE_BUCKET as string || "" ,
+  messagingSenderId: import.meta.env.VITE_MESSAGEING_SENDER_ID as string || "" ,
+  appId: import.meta.env.VITE_APP_ID as string || "" , 
+  measurementId: import.meta.env.VITE_MEASUREMENT_ID as string || "" ,
 }
 
 
