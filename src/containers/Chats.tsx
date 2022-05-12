@@ -119,7 +119,7 @@ const ChatsUser = (props: Props) => {
         <Box d="flex">
           <Avatar src={selectUser?.photoURL} borderColor="whiteAlpha.400">
             <AvatarBadge
-              borderColor={data?.isOnline ? "green.500" : "papayawhip"}
+              borderColor={data?.isOnline ? "green.100" : "papayawhip"}
               bg={data?.isOnline ? "green.500" : "tomato"}
               boxSize="1em"
             />
