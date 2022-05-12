@@ -105,8 +105,7 @@ const ChatList = (props: Props) => {
         borderStyle="solid"
         h={{ base: "100px", md: "70px" }}
         borderRadius="10px"
-        onClick={async (e) => {
-          e.preventDefault()
+        onClick={async () => {
           await dispatch<any>(
             selectUsers(myUid ,{
               name: info.name,
