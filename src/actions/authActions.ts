@@ -128,6 +128,7 @@ export const authEmail = (email: string, pwd: string) => {
     try {
       await signInWithEmailAndPassword(auth, email, pwd).then(() => {
         const user =  auth.currentUser as firebase.User
+        checkUser(user)
         dispatch(authed(user))
       })
     } catch (err ) {

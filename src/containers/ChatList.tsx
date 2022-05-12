@@ -83,10 +83,9 @@ const ChatList = (props: Props) => {
   const { info, users } = useAppSelector((state) => state.fetchUser)
   const { userData } = useAppSelector((state) => state.authUser)
   const { lastMsg, isFetching } = useAppSelector((state) => state.fetchUnread)
-  // console.log(lastMsg)
 
   const renderList = (info: IlastMsgUser, i: number, myUid: string) => {
-    let id = generateID(myUid, info.uid)
+    // let id = generateID(myUid, info.uid)
     const data = users.find((user) => user.uid === info.uid)
     // let text = info.lastMsg.text
     return (
@@ -105,9 +104,9 @@ const ChatList = (props: Props) => {
         borderStyle="solid"
         h={{ base: "100px", md: "70px" }}
         borderRadius="10px"
-        onClick={async () => {
+        onClick={async() => {
           await dispatch<any>(
-            selectUsers(myUid ,{
+            selectUsers(myUid, {
               name: info.name,
               photoURL: info.photoURL,
               uid: info.uid,
@@ -173,7 +172,8 @@ const ChatList = (props: Props) => {
                 isLoaded={!isFetching}
               >
                 <Text fontSize="14px">
-                  {`${info.lastMsg.text.substring(0, 10)}`} {info.lastMsg.text.length > 9 && "..."}
+                  {`${info.lastMsg.text.substring(0, 10)}`}{" "}
+                  {info.lastMsg.text.length > 9 && "..."}
                 </Text>
               </Skeleton>
             </Flex>
@@ -220,7 +220,7 @@ const ChatList = (props: Props) => {
         </InputGroup>
 
         {lastMsg &&
-          lastMsg.map( (info, i) => {
+          lastMsg.map((info, i) => {
             if (info.uid === userData?.uid) return null
             return renderList(info, i, userData?.uid as string)
           })}

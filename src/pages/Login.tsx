@@ -34,6 +34,8 @@ import { authGoogle, authGit, signup, authEmail } from "../actions/authActions"
 import { useAppDispatch, useAppSelector } from "../redux/Store"
 import { useDisclosure } from "@chakra-ui/react"
 import React from "react"
+import githubImg from "../public/githubLogo.png" 
+import googleImg from "../public/googleLogo.png"
 
 const ButtonMotion = motion(Button)
 const ContainerMotion = motion(Container)
@@ -84,7 +86,7 @@ const Login = () => {
                     </FormLabel>
                     <Input
                       ref={signupName}
-                      onChange={(e) => {
+                      onChange={() => {
                         let name = signupName?.current?.value as string
                         if (name.length > 1 && name.length < 20)
                           setshowErrorName(false)
@@ -104,7 +106,7 @@ const Login = () => {
                     </FormLabel>
                     <Input
                       ref={signupEmail}
-                      onChange={(e) => {
+                      onChange={() => {
                         setShowErrorEmail(
                           !isValidateEmail(signupEmail.current?.value as string)
                         )
@@ -124,7 +126,7 @@ const Login = () => {
                     <InputGroup>
                       <Input
                         ref={signupPwd}
-                        onChange={(e) => {
+                        onChange={() => {
                           let password = signupPwd.current?.value as string
                           if (password.length < 6) setShowErrorPwd(true)
                           if (password.length > 6) setShowErrorPwd(false)
@@ -158,7 +160,7 @@ const Login = () => {
                     <InputGroup>
                       <Input
                         ref={signupPwdCon}
-                        onChange={(e) => {
+                        onChange={() => {
                           let pwd = signupPwd.current?.value as string
                           let pwdCon = signupPwdCon.current?.value as string
                           if (pwd === pwdCon && !showErrorPwd)
@@ -195,7 +197,7 @@ const Login = () => {
               <Button
                 colorScheme="blue"
                 mr={3}
-                onClick={async (e) => {
+                onClick={async (e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                   e.preventDefault()
                   if (
                     showErrorName &&
@@ -286,7 +288,7 @@ const Login = () => {
               </FormLabel>
               <Input
                 value={email as string}
-                onChange={(e) => {
+                onChange={(e:React.ChangeEvent<HTMLInputElement> ) => {
                   setShowErrorEmail(!isValidateEmail(e.target.value))
                   setEmail(e.target.value)
                 }}
@@ -308,7 +310,7 @@ const Login = () => {
               <InputGroup>
                 <Input
                   value={password as string}
-                  onChange={(e) => {
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setPassword(e.target.value)
                   }}
                   isInvalid={showErrorPwd as boolean}
@@ -397,7 +399,7 @@ const Login = () => {
                 w="30px"
                 h="30px"
                 alt="google"
-                src="../asset/googleLogo.png"
+                src={googleImg}
               />
               Continue with Google
             </ButtonMotion>
@@ -427,7 +429,7 @@ const Login = () => {
                 w="25px"
                 h="25px"
                 alt="github"
-                src="../asset/githubLogo.png"
+                src={githubImg}
               />
               Continue with Github
             </ButtonMotion>

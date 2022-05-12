@@ -36,6 +36,7 @@ import { Chats } from "../types/chatsType"
 import { fetch_chats, addChats } from "../actions/fetchChatsAction"
 import { useAppSelector, useAppDispatch } from "../redux/Store"
 import { decrypt, generateID } from "../functions"
+import MessageIcon from "../public/messages.svg"
 
 type Props = {
   // socket: Socket
@@ -90,11 +91,12 @@ const ChatsUser = (props: Props) => {
   }, [arrivalMessage, selectUser?.uid])
 
   React.useEffect(() => {
-    if (selectUser?.uid)
-      return dispatch<any>(
-        fetch_chats(userData?.uid as string, selectUser?.uid as string)
-      )
-  }, [selectUser?.uid, userData?.uid])
+    console.log(chats)
+    console.log(selectUser?.uid)
+    return dispatch<any>(
+      fetch_chats(userData?.uid as string, selectUser?.uid as string)
+    )
+  }, [selectUser?.uid])
 
   React.useEffect(() => {
     let userId = userData?.uid as string
@@ -105,7 +107,7 @@ const ChatsUser = (props: Props) => {
     return (
       <Center mt="200px">
         <Box textAlign="center">
-          <Image alt="messages" src="../../asset/messages.svg" />
+          <Image alt="messages" src={MessageIcon} />
           <Text>let's start Chat</Text>
         </Box>
       </Center>
@@ -169,12 +171,13 @@ const ChatsUser = (props: Props) => {
         minH="100%"
       >
         {selectUser && ChatBar(selectUser)}
-        {chats.length === 0 && noMessages()}
-        {chats.length > 0 && (
+        {chats.length >= 1 ? (
           <Box d="flex" flexDirection="column" overflowY="auto" h="82vh">
             {<BubbleChat />}
             <AlwaysScrollToBottom />
           </Box>
+        ) : (
+          noMessages()
         )}
         {selectUser && <FormChat socket={socket.current as Socket} />}
       </BoxMotion>

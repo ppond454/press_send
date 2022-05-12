@@ -24,7 +24,7 @@ import {
   FETCHING_CHATS,
   ChatsActions,
 } from "../types/chatsType"
-import { generateID , decrypt } from "../functions/index"
+import { generateID, decrypt } from "../functions/index"
 
 export const fetching_chats = (): ChatsActions => {
   return {
@@ -53,10 +53,9 @@ export const clear_fetching_chats = (): ChatsActions => {
 
 export const fetch_chats = (myUid: string, friendId: string) => {
   return async (dispatch: Dispatch<ChatsActions>) => {
+    if (!friendId) return null
     dispatch(fetching_chats())
     try {
-      if (!friendId) return null
-  
       let id: string = generateID(myUid, friendId)
       const msgsRef = collection(db, "messages", id, "chats")
       const q = query(msgsRef, orderBy("createdAt", "asc"))
@@ -66,16 +65,20 @@ export const fetch_chats = (myUid: string, friendId: string) => {
       const querySnapshot = await getDocs(q)
       querySnapshot.forEach(async (doc) => {
         if (doc.exists()) {
-          msgs.push({...doc.data() , createdAt: doc.data().createdAt.toDate() , text: await decrypt(id,doc.data().text)  } as Chats)
+          msgs.push({
+            ...doc.data(),
+            createdAt: doc.data().createdAt.toDate(),
+            text: await decrypt(id, doc.data().text),
+          } as Chats)
         }
       })
-
-      dispatch(fetched_chats(msgs))
       const docSnap = await getDoc(doc(db, "lastMsg", id))
 
       if (docSnap.data() && docSnap.data()?.from !== myUid) {
         await updateDoc(doc(db, "lastMsg", id), { unread: false })
       }
+
+      dispatch(fetched_chats(msgs))
     } catch (e) {
       dispatch(error_fetching_chats())
       throw e

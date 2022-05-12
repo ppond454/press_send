@@ -10,6 +10,9 @@ import {
 } from "@chakra-ui/react"
 import { ChevronRightIcon } from "@chakra-ui/icons"
 import { motion } from "framer-motion"
+import requestIcon from "../public/request.svg"
+import suggestIcon from "../public/suggest.svg"
+import friendshipIcon from "../public/friendship.svg"
 
 type Props = {
   option: number
@@ -55,14 +58,14 @@ const FriendBar = (props: Props) => {
         h="70px"
         borderRadius="10px"
         mt="10px"
-        onClick={(e) => {
-          e.preventDefault()
+        onClick={() => {
+   
           setOption(1)
           localStorage.setItem("option", JSON.stringify(1))
         }}
       >
         <Box px="5px" my="auto" d="flex">
-          <Avatar bg="whiteAlpha" src="../../asset/friendship.svg" />
+          <Avatar bg="whiteAlpha" src={friendshipIcon} />
         </Box>
         <Box my="auto" d="flex" w="100vw">
           <Spacer />
@@ -83,14 +86,14 @@ const FriendBar = (props: Props) => {
         borderStyle="solid"
         h="70px"
         borderRadius="10px"
-        onClick={(e) => {
-          e.preventDefault()
+        onClick={() => {
+        
           setOption(2)
           localStorage.setItem("option", JSON.stringify(2))
         }}
       >
         <Box px="5px" my="auto">
-          <Avatar bg="whiteAlpha" src="../../asset/suggest.svg" />
+          <Avatar bg="whiteAlpha" src={suggestIcon} />
         </Box>
         <Box d="flex" my="auto" w="100vw">
           <Spacer />
@@ -109,14 +112,14 @@ const FriendBar = (props: Props) => {
         borderStyle="solid"
         h="70px"
         borderRadius="10px"
-        onClick={(e) => {
-          e.preventDefault()
+        onClick={() => {
+      
           setOption(3)
           localStorage.setItem("option", JSON.stringify(3))
         }}
       >
         <Box px="5px" d="flex" my="auto">
-          <Avatar bg="whiteAlpha" src="../../asset/request.svg" />
+          <Avatar bg="whiteAlpha" src={requestIcon} />
         </Box>
         <Box my="auto" d="flex" w="100vw">
           <Spacer />

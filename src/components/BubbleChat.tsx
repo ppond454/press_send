@@ -31,55 +31,49 @@ const BubbleChat = (props: Props) => {
   const { userData } = useAppSelector((state) => state.authUser)
   const { selectUser } = useAppSelector((state) => state.fetchSelectUser)
 
-  let chatMock = chats as Chats[]
-  
   return (
     <>
-      {chatMock.length > 0 &&
-        chatMock.map((chat, i) => {
-          let text = chat.text  
-          return (
-            <Flex
-              key={i}
-              p="10px"
-              shadow="xl"
-              borderRadius="10px"
-              my="10px"
-              color="white"
-              bg={chat.from === userData?.uid ? "#ffeed4" : "#473417"}
-              alignSelf={
-                chat.from === userData?.uid ? "flex-end" : "flex-start"
-              }
-              justifySelf="flex-start"
-              mx="10px"
-            >
-              <Box color={chat.from === userData?.uid ? "#473417" : "#ffeed4"}>
-                <Box>
-                  <Text
-                    fontWeight="normal"
-                    float={chat.from === userData?.uid ? "right" : "left"}
-                    fontSize="15px"
-                    maxW="200px"
-                  >
-                    {text}
-                  </Text>
-                </Box>
-                <Box>
-                  <Text
-                    fontWeight="light"
-                    as="i"
-                    float={chat.from === userData?.uid ? "right" : "left"}
-                    fontSize="12px"
-                  >
-                    {moment(chat.createdAt).fromNow()}
-                  </Text>
-                </Box>
+      {chats.map((chat, i) => {
+        let text = chat.text
+        return (
+          <Flex
+            key={i}
+            p="10px"
+            shadow="xl"
+            borderRadius="10px"
+            my="10px"
+            color="white"
+            bg={chat.from === userData?.uid ? "#ffeed4" : "#473417"}
+            alignSelf={chat.from === userData?.uid ? "flex-end" : "flex-start"}
+            justifySelf="flex-start"
+            mx="10px"
+          >
+            <Box color={chat.from === userData?.uid ? "#473417" : "#ffeed4"}>
+              <Box>
+                <Text
+                  fontWeight="normal"
+                  float={chat.from === userData?.uid ? "right" : "left"}
+                  fontSize="15px"
+                  maxW="200px"
+                >
+                  {text}
+                </Text>
               </Box>
-            </Flex>
-          )
-        })}
+              <Box>
+                <Text
+                  fontWeight="light"
+                  as="i"
+                  float={chat.from === userData?.uid ? "right" : "left"}
+                  fontSize="12px"
+                >
+                  {moment(chat.createdAt).fromNow()}
+                </Text>
+              </Box>
+            </Box>
+          </Flex>
+        )
+      })}
     </>
   )
 }
 export default BubbleChat
-

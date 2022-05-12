@@ -30,6 +30,11 @@ import { clearUsers } from "../actions/fetchUserActions"
 import { clearUnread } from "../actions/lastMsgActions"
 import { clear_chats} from "../actions/fetchChatsAction"
 import CustomLink from "../custom/customLink"
+import LogoutIcon from "../public/LogoutIcon.svg"
+import PersonalIcon from "../public/personal.svg"
+import FriendIcon from "../public/friendIcon.svg"
+import chatsIcon from "../public/chatsIcon.svg"
+
 
 type Props = {}
 
@@ -49,13 +54,13 @@ const SideBar = (props: Props) => {
       bg="whiteAlpha.600"
     >
       <CustomLink href="/">
-        <Image h="30px" w="30px" src="../../asset/chatsIcon.svg" />
+        <Image h="30px" w="30px" src={chatsIcon} />
       </CustomLink>
       <CustomLink href="/friend">
-        <Image h="30px" w="30px" src="../../asset/friendIcon.svg" />
+        <Image h="30px" w="30px" src={FriendIcon} />
       </CustomLink>
       <CustomLink href="/profile">
-        <Image h="30px" w="30px" src="../../asset/personal.svg" />
+        <Image h="30px" w="30px" src={PersonalIcon} />
       </CustomLink>
       <Spacer />
       <Menu>
@@ -85,7 +90,7 @@ const SideBar = (props: Props) => {
               }
             }}
           >
-            <Image w="20px" mx="10px" src="../../asset/LogoutIcon.svg" /> Log
+            <Image w="20px" mx="10px" src={LogoutIcon} /> Log
             Out
           </MenuItem>
         </MenuList>
