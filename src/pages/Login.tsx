@@ -34,7 +34,7 @@ import { authGoogle, authGit, signup, authEmail } from "../actions/authActions"
 import { useAppDispatch, useAppSelector } from "../redux/Store"
 import { useDisclosure } from "@chakra-ui/react"
 import React from "react"
-import githubImg from "../public/githubLogo.png" 
+import githubImg from "../public/githubLogo.png"
 import googleImg from "../public/googleLogo.png"
 
 const ButtonMotion = motion(Button)
@@ -62,7 +62,9 @@ const Login = () => {
   let [showErrorName, setshowErrorName] = useState<Boolean>(false)
 
   const dispatch = useAppDispatch()
-  const { isFetching, isError , userData} = useAppSelector((state) => state.authUser)
+  const { isFetching, isError, userData } = useAppSelector(
+    (state) => state.authUser
+  )
 
   const ModalSignup = () => {
     return (
@@ -197,7 +199,9 @@ const Login = () => {
               <Button
                 colorScheme="blue"
                 mr={3}
-                onClick={async (e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                onClick={async (
+                  e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+                ) => {
                   e.preventDefault()
                   if (
                     showErrorName &&
@@ -287,8 +291,9 @@ const Login = () => {
                 Email
               </FormLabel>
               <Input
+                id="email"
                 value={email as string}
-                onChange={(e:React.ChangeEvent<HTMLInputElement> ) => {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setShowErrorEmail(!isValidateEmail(e.target.value))
                   setEmail(e.target.value)
                 }}
@@ -394,13 +399,7 @@ const Login = () => {
                 await dispatch<any>(authGoogle())
               }}
             >
-              <Image
-                m={2}
-                w="30px"
-                h="30px"
-                alt="google"
-                src={googleImg}
-              />
+              <Image m={2} w="30px" h="30px" alt="google" src={googleImg} />
               Continue with Google
             </ButtonMotion>
             <ButtonMotion
@@ -424,13 +423,7 @@ const Login = () => {
                 dispatch<any>(authGit())
               }}
             >
-              <Image
-                m={2}
-                w="25px"
-                h="25px"
-                alt="github"
-                src={githubImg}
-              />
+              <Image m={2} w="25px" h="25px" alt="github" src={githubImg} />
               Continue with Github
             </ButtonMotion>
           </Stack>
