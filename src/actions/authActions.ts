@@ -30,6 +30,7 @@ import {
   Actions,
 } from "../types/authType"
 import { Dispatch } from "redux"
+import { FirebaseError } from "firebase/app"
 
 export const authing = (): Actions => ({
   type: AUTHING,
@@ -86,7 +87,9 @@ const checkUser = async (user: firebase.User, name?: string) => {
       })
     }
   } catch (err) {
-    throw err
+    if (err instanceof FirebaseError) {
+      throw err.message
+    }
   }
 }
 
@@ -127,31 +130,35 @@ export const authEmail = (email: string, pwd: string) => {
     dispatch(authing())
     try {
       await signInWithEmailAndPassword(auth, email, pwd).then(() => {
-        const user =  auth.currentUser as firebase.User
+        const user = auth.currentUser as firebase.User
         checkUser(user)
         dispatch(authed(user))
       })
-    } catch (err ) {
-      dispatch(error_auth())
-      alert(err)
-      throw err
+    } catch (err) {
+      if (err instanceof FirebaseError) {
+        dispatch(error_auth())
+        alert(err.message)
+        throw err.message
+      }
     }
   }
 }
 
-export const signup =  (name: string, pwd: string, email: string) => {
+export const signup = (name: string, pwd: string, email: string) => {
   return async (dispatch: Dispatch<Actions>) => {
     dispatch(authing())
     try {
-      await createUserWithEmailAndPassword(auth, email, pwd).then( () => {
+      await createUserWithEmailAndPassword(auth, email, pwd).then(() => {
         const user = auth.currentUser as firebase.User
-         checkUser(user, name)
+        checkUser(user, name)
         dispatch(authed(user))
       })
     } catch (err) {
-      dispatch(error_auth())
-      alert(err)
-      throw err
+      if (err instanceof FirebaseError) {
+        dispatch(error_auth())
+        alert(err.message)
+        throw err.message
+      }
     }
   }
 }
@@ -167,8 +174,10 @@ export const signoutUser = (uid: string) => {
         dispatch(signout())
       })
     } catch (err) {
-      dispatch(error_auth())
-      throw err
+      if (err instanceof FirebaseError) {
+        dispatch(error_auth())
+        throw err
+      }
     }
   }
 }
