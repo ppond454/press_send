@@ -91,8 +91,6 @@ const ChatsUser = (props: Props) => {
   }, [arrivalMessage, selectUser?.uid])
 
   React.useEffect(() => {
-    console.log(chats)
-    console.log(selectUser?.uid)
     return dispatch<any>(
       fetch_chats(userData?.uid as string, selectUser?.uid as string)
     )
