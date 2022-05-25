@@ -253,9 +253,10 @@ const Login = () => {
           backdropFilter: "blur(10px)",
           textDecoration: "none",
         }}
+
         shadow="2xl"
         h="auto"
-        w={500}
+        w={{base:"300px",md:"auto"}}
         bgColor="whiteAlpha.600"
         m="5%"
         borderRadius={15}
