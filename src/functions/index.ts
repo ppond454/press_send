@@ -19,8 +19,7 @@ import {
 } from "firebase/firestore"
 import firebase, { db, auth } from "../config/firebase"
 import { Chats } from "../types/chatsType"
-import CryptoJS, { AES } from "crypto-js"
-import { async } from "@firebase/util"
+import CryptoJS from "crypto-js"
 export const isValidateEmail = (email: string): boolean => {
   const re =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
@@ -127,14 +126,9 @@ export const generateID = (me: string, friend: string) => {
   return id
 }
 
-export const encrypt = async (id: string, text: string) => {
-  let msg = AES.encrypt(text, id).toString()
-  return msg
-}
-export const decrypt = async (id: string, text: string) => {
-  let msg = AES.decrypt(text, id).toString(CryptoJS.enc.Utf8)
-  return msg
-}
+export const encrypt = (id: string, text: string) =>CryptoJS.TripleDES.encrypt(text,id).toString()
+
+export const decrypt = (id: string, text: string) =>CryptoJS.TripleDES.decrypt(text,id).toString(CryptoJS.enc.Utf8)
 
 export const unreadUpdate = async (myUid: string, friendUid: string) => {
   let id = generateID(myUid, friendUid)

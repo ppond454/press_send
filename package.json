@@ -16,6 +16,7 @@
         "@fontsource/playfair-display": "^4.5.9",
         "@fontsource/source-sans-pro": "^4.5.9",
         "@fontsource/ubuntu-mono": "^4.5.9",
+        "@types/crypto-js": "^4.1.1",
         "crypto-js": "^4.1.1",
         "firebase": "^9.6.10",
         "framer-motion": "^6",
@@ -32,7 +33,6 @@
         "socket.io-client": "^4.5.0"
     },
     "devDependencies": {
-        "@types/crypto-js": "^4.1.1",
         "@types/react": "^17.0.33",
         "@types/react-dom": "^17.0.10",
         "@vitejs/plugin-react": "^1.0.7",

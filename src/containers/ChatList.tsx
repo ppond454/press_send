@@ -172,8 +172,8 @@ const ChatList = (props: Props) => {
                 isLoaded={!isFetching}
               >
                 <Text fontSize="14px">
-                  {`${info.lastMsg.text.substring(0, 10)}`}{" "}
-                  {info.lastMsg.text.length > 9 && "..."}
+                  {`${info?.lastMsg?.text.substring(0, 10)}`}{" "}
+                  {info?.lastMsg?.text.length > 9 && "..."}
                 </Text>
               </Skeleton>
             </Flex>
