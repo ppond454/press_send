@@ -78,9 +78,9 @@ const ChatsUser = (props: Props) => {
     socket.current.on("getMessage", async (data: Chats) => {
       const text = await decrypt(id, data.text)
       console.log(text)
-      setArrivalMessage({ ...data, text })
+      setArrivalMessage({ ...data,  text })
     })
-    return () => setArrivalMessage(null)
+    // return () => setArrivalMessage(null)
   }, [])
 
   React.useEffect(() => {
