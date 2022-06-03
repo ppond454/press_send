@@ -69,18 +69,17 @@ const ChatsUser = (props: Props) => {
   const { selectUser } = useAppSelector((state) => state.fetchSelectUser)
   const { users } = useAppSelector((state) => state.fetchUser)
   const Navigate = useNavigate()
-  const id = generateID(userData?.uid as string, selectUser?.uid as string)
+  const id = React.useMemo(() => {
+    return generateID(userData?.uid as string, selectUser?.uid as string)
+  }, [selectUser?.uid, selectUser?.uid])
 
   React.useEffect(() => {
-
     socket.current = io(ENDPOINT as string)
     socket.current.on("getMessage", async (data: Chats) => {
-      decrypt(id, data.text).then((text) => {
-        // console.log(text)
-        setArrivalMessage({ ...data, text })
-      })
+      const text = await decrypt(id, data.text)
+      setArrivalMessage({ ...data, text })
     })
-    // return () => setArrivalMessage(null)
+    return () => setArrivalMessage(null)
   }, [])
 
   React.useEffect(() => {
