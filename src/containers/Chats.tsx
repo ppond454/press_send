@@ -77,11 +77,12 @@ const ChatsUser = (props: Props) => {
   React.useEffect(() => {
     socket.current = io(ENDPOINT as string)
     socket.current.on("getMessage", (data: Chats) => {
-      decrypt(id(), data.text).then((text) =>
+      decrypt(id(), data.text).then((text) => {
+        // console.log(text)
         setArrivalMessage({ ...data, text })
-      )
+      })
     })
-    return () => setArrivalMessage(null)
+    // return () => setArrivalMessage(null)
   }, [])
 
   React.useEffect(() => {
