@@ -127,7 +127,7 @@ export const generateID = (me: string, friend: string) => {
 }
 
 export const encrypt = async (id: string, text: string) =>
-  CryptoJS.AES.encrypt(JSON.stringify(text), id).toString()
+  CryptoJS.AES.encrypt(JSON.stringify({text}), id).toString()
 
 export const decrypt = async (id: string, text: string) => {
   const data = CryptoJS.AES.decrypt(text, id)
