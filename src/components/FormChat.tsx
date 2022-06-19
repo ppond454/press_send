@@ -36,7 +36,7 @@ const FormChat = ({ socket }: Props) => {
     try {
       if (!text.current?.value) return
       let _id = id()
-      let encry_text = encrypt(_id, text.current?.value)
+      let encry_text = await encrypt(_id, text.current?.value)
       let chat: Chats = {
         from: userData?.uid as string,
         to: selectUser?.uid as string,
