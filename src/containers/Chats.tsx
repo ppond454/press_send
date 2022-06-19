@@ -58,7 +58,6 @@ const VariantMotion = {
   },
 }
 
-
 const ChatsUser = (props: Props) => {
   const ENDPOINT =
     import.meta.env.VITE_SOCKET_ENDPOINT || ("ws://localhost:4000/" as string)
@@ -77,18 +76,16 @@ const ChatsUser = (props: Props) => {
 
   React.useEffect(() => {
     socket.current = io(ENDPOINT as string)
-    socket.current.on("getMessage",async  (data: Chats) => {
+    socket.current.on("getMessage", (data: Chats) => {
       setArrivalMessage({ ...data })
-      console.log({...data})
-      
     })
-    return () => setArrivalMessage(null)
   }, [])
 
   React.useEffect(() => {
     arrivalMessage &&
       selectUser?.uid === arrivalMessage.from &&
       dispatch<any>(addChats(chats, arrivalMessage))
+    return () => setArrivalMessage(null)
   }, [arrivalMessage, selectUser?.uid])
 
   React.useEffect(() => {

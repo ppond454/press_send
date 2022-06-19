@@ -32,7 +32,7 @@ const BubbleChat = (props: Props) => {
 
   return (
     <>
-      {chats.map((chat, i) => {
+      {chats.map((chat, i) => {     
         let text = chat.text
         return (
           <Flex
