@@ -36,7 +36,7 @@ const FormChat = ({ socket }: Props) => {
     try {
       if (!text.current?.value) return
       let _id = id()
-      let encry_text = await encrypt(_id, text.current?.value)
+      let encry_text = encrypt(_id, text.current?.value)
       let chat: Chats = {
         from: userData?.uid as string,
         to: selectUser?.uid as string,
@@ -52,7 +52,7 @@ const FormChat = ({ socket }: Props) => {
         createdAt: Timestamp.fromDate(new Date()).toDate(),
         media: "" as string,
       }
-      socket.emit("sendMessage", { ...chat })
+      socket.emit("sendMessage", { ..._chat })
       dispatch<any>(addChats(chats, _chat))
       text.current.value = ""
     } catch (error) {

@@ -29,7 +29,6 @@ const BubbleChat = (props: Props) => {
   moment.updateLocale("en", { relativeTime: CONFIG_NEW })
   const { chats } = useAppSelector((state) => state.fetchChat)
   const { userData } = useAppSelector((state) => state.authUser)
-  const { selectUser } = useAppSelector((state) => state.fetchSelectUser)
 
   return (
     <>
