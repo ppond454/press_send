@@ -79,6 +79,8 @@ const ChatsUser = (props: Props) => {
     socket.current = io(ENDPOINT as string)
     socket.current.on("getMessage",async  (data: Chats) => {
       setArrivalMessage({ ...data })
+      console.log(...data)
+      
     })
     return () => setArrivalMessage(null)
   }, [])
